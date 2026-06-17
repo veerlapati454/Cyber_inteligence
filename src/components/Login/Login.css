@@ -1,0 +1,474 @@
+/* =============================================
+   CYBER INTELLIGENCE LOGIN — 3D ANIMATED CSS
+   Palette: Deep void + electric cyan + matrix green + warning amber
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── CSS Variables ── */
+:root {
+  --void:        #020812;
+  --deep:        #050f1e;
+  --card-bg:     rgba(5, 20, 40, 0.82);
+  --cyan:        #00f5ff;
+  --cyan-dim:    #00a8b5;
+  --green:       #00ff88;
+  --amber:       #ffb300;
+  --red-err:     #ff3c5f;
+  --text-main:   #cce8ff;
+  --text-muted:  #4a7a99;
+  --border-glow: rgba(0, 245, 255, 0.25);
+  --font-display: 'Rajdhani', sans-serif;
+  --font-mono:    'Share Tech Mono', monospace;
+}
+
+/* ── Full-Page Background ── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--void);
+  background-image:
+    /* SVG circuit grid */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M0 40h30M50 40h30M40 0v30M40 50v30' stroke='%2300f5ff' stroke-width='0.4' opacity='0.15'/%3E%3Ccircle cx='40' cy='40' r='3' fill='none' stroke='%2300f5ff' stroke-width='0.6' opacity='0.2'/%3E%3Ccircle cx='0'  cy='0'  r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='80' cy='0'  r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='0'  cy='80' r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='80' cy='80' r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3C/svg%3E"),
+    /* Radial glow at center */
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,80,120,0.45) 0%, transparent 70%),
+    /* Deep gradient base */
+    linear-gradient(160deg, #020d1a 0%, #020812 55%, #04101c 100%);
+  background-size: 80px 80px, cover, cover;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-display);
+  perspective: 1200px;
+}
+
+/* ── Animated scanline overlay ── */
+.login-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 245, 255, 0.022) 3px,
+    rgba(0, 245, 255, 0.022) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: scanlines 8s linear infinite;
+}
+
+/* ── Floating particle streaks ── */
+.login-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15%  20%, var(--cyan)  0%, transparent 100%),
+    radial-gradient(1px 1px at 80%  10%, var(--green) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55%  75%, var(--cyan)  0%, transparent 100%),
+    radial-gradient(1px 1px at 30%  60%, var(--green) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90%  85%, var(--cyan)  0%, transparent 100%),
+    radial-gradient(1px 1px at 5%   90%, var(--amber) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70%  40%, var(--cyan)  0%, transparent 100%),
+    radial-gradient(1px 1px at 42%  5%,  var(--green) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  animation: particleDrift 12s ease-in-out infinite alternate;
+  opacity: 0.7;
+}
+
+/* ── Login Card — 3D float + glassmorphism ── */
+.login-card {
+  position: relative;
+  z-index: 10;
+  width: min(440px, 92vw);
+  padding: 44px 40px 36px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    0 0 0 1px rgba(0,245,255,0.08),
+    0 0 40px rgba(0,245,255,0.12),
+    0 0 100px rgba(0,30,60,0.7),
+    inset 0 1px 0 rgba(0,245,255,0.1);
+
+  /* 3D lift on load */
+  animation: cardFloat 6s ease-in-out infinite, cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-style: preserve-3d;
+
+  /* Accent corner slash */
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+/* Corner accent lines */
+.login-card::before,
+.login-card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+.login-card::before {
+  top: -1px; right: -1px;
+  width: 22px; height: 22px;
+  border-top: 2px solid var(--cyan);
+  border-right: 2px solid var(--cyan);
+  box-shadow: 0 0 12px var(--cyan), 4px -4px 20px rgba(0,245,255,0.4);
+}
+.login-card::after {
+  bottom: -1px; left: -1px;
+  width: 22px; height: 22px;
+  border-bottom: 2px solid var(--cyan);
+  border-left: 2px solid var(--cyan);
+  box-shadow: 0 0 12px var(--cyan), -4px 4px 20px rgba(0,245,255,0.4);
+}
+
+/* ── Back Button ── */
+.back-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  padding: 0 0 24px;
+  transition: color 0.25s, transform 0.25s;
+}
+.back-home-btn:hover {
+  color: var(--cyan);
+  transform: translateX(-4px);
+}
+.back-home-btn svg {
+  font-size: 1rem;
+}
+
+/* ── Headings ── */
+.login-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: 0 0 18px rgba(0,245,255,0.6), 0 0 40px rgba(0,245,255,0.25);
+  line-height: 1.15;
+  margin-bottom: 6px;
+  animation: textFlicker 7s step-end infinite;
+}
+
+.login-card > p {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+/* ── Role Switch ── */
+.role-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.role-switch button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0;
+  background: rgba(0,245,255,0.04);
+  border: 1px solid rgba(0,245,255,0.15);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.role-switch button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(0,245,255,0.06) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.role-switch button:hover::before { opacity: 1; }
+.role-switch button:hover {
+  border-color: rgba(0,245,255,0.4);
+  color: var(--text-main);
+}
+.role-switch button.active-role {
+  background: rgba(0,245,255,0.1);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 18px rgba(0,245,255,0.2), inset 0 0 12px rgba(0,245,255,0.05);
+  text-shadow: 0 0 10px rgba(0,245,255,0.5);
+  animation: roleGlow 2.5s ease-in-out infinite;
+}
+
+/* ── Input Groups ── */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+.input-group label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cyan-dim);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0,20,40,0.7);
+  border: 1px solid rgba(0,245,255,0.18);
+  border-radius: 3px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+  caret-color: var(--cyan);
+}
+.input-group input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-size: 0.82rem;
+}
+.input-group input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(0,245,255,0.1), 0 0 20px rgba(0,245,255,0.12);
+  transform: translateY(-1px) translateZ(4px);
+  background: rgba(0,30,55,0.85);
+}
+
+/* ── Password Box ── */
+.password-box {
+  position: relative;
+}
+.password-box input {
+  width: 100%;
+  padding-right: 46px;
+}
+.password-box span {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+.password-box span:hover { color: var(--cyan); }
+
+/* ── Validation Text ── */
+.error-text {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--red-err);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(255,60,95,0.5);
+  animation: errorPulse 1.5s ease-in-out infinite;
+}
+.success-text {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--green);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(0,255,136,0.4);
+}
+
+/* ── Submit Button ── */
+.login-btn-submit {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px;
+  background: linear-gradient(90deg, rgba(0,180,220,0.15) 0%, rgba(0,245,255,0.1) 100%);
+  border: 1px solid var(--cyan);
+  border-radius: 3px;
+  color: var(--cyan);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0,245,255,0.15), inset 0 0 20px rgba(0,245,255,0.04);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+/* Sweep shimmer */
+.login-btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,245,255,0.15), transparent);
+  transition: left 0s;
+}
+.login-btn-submit:hover::before {
+  left: 150%;
+  transition: left 0.55s ease;
+}
+.login-btn-submit:hover {
+  background: rgba(0,245,255,0.18);
+  box-shadow: 0 0 35px rgba(0,245,255,0.3), 0 0 80px rgba(0,245,255,0.1), inset 0 0 20px rgba(0,245,255,0.08);
+  text-shadow: 0 0 12px rgba(0,245,255,0.8);
+  transform: translateY(-2px) translateZ(6px);
+}
+.login-btn-submit:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 0 12px rgba(0,245,255,0.2);
+}
+
+/* ── Footer ── */
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.login-footer a {
+  color: var(--green);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.login-footer a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 12px var(--green);
+}
+
+/* ══════════════════════════════════════
+   KEYFRAME ANIMATIONS
+══════════════════════════════════════ */
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: rotateX(20deg) rotateY(-10deg) translateY(40px) scale(0.92);
+    filter: brightness(0.4) blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
+    filter: brightness(1) blur(0px);
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg);
+    box-shadow:
+      0 0 0 1px rgba(0,245,255,0.08),
+      0 0 40px rgba(0,245,255,0.12),
+      0 0 100px rgba(0,30,60,0.7),
+      inset 0 1px 0 rgba(0,245,255,0.1);
+  }
+  30% {
+    transform: translateY(-6px) rotateX(1.2deg);
+    box-shadow:
+      0 0 0 1px rgba(0,245,255,0.12),
+      0 0 55px rgba(0,245,255,0.18),
+      0 24px 80px rgba(0,20,50,0.8),
+      inset 0 1px 0 rgba(0,245,255,0.15);
+  }
+  60% {
+    transform: translateY(-3px) rotateX(0.5deg) rotateY(0.5deg);
+  }
+}
+
+@keyframes scanlines {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+@keyframes particleDrift {
+  0%   { transform: translateY(0)   scale(1);   opacity: 0.7; }
+  50%  { transform: translateY(-20px) scale(1.05); opacity: 0.9; }
+  100% { transform: translateY(8px)  scale(0.97);  opacity: 0.6; }
+}
+
+@keyframes textFlicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%  { opacity: 0.85; }
+  97%  { opacity: 1; }
+  98%  { opacity: 0.7; }
+  99%  { opacity: 1; }
+}
+
+@keyframes roleGlow {
+  0%, 100% { box-shadow: 0 0 18px rgba(0,245,255,0.2), inset 0 0 12px rgba(0,245,255,0.05); }
+  50%       { box-shadow: 0 0 32px rgba(0,245,255,0.35), inset 0 0 18px rgba(0,245,255,0.1); }
+}
+
+@keyframes errorPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .login-card,
+  .login-card h2,
+  .login-page::before,
+  .login-page::after,
+  .role-switch button.active-role,
+  .error-text {
+    animation: none;
+  }
+  .login-btn-submit::before { display: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 34px 22px 28px;
+  }
+  .login-card h2 {
+    font-size: 1.3rem;
+  }
+}

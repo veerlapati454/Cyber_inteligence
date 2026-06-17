@@ -1,0 +1,846 @@
+/* ==========================================================================
+   SERVICES.CSS
+   Theme: intelligence "case file" — dark surface, scanning motion, stamped
+   classification marks. Built around the radar/pulse language already used
+   in the hero, carried through into every other section.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+.services-page {
+  /* ---- tokens -------------------------------------------------------- */
+  --bg: #070b12;
+  --surface: #0d1521;
+  --surface-alt: #121c2b;
+  --border: rgba(150, 180, 210, 0.14);
+  --border-strong: rgba(150, 180, 210, 0.28);
+  --text: #e9eef7;
+  --muted: #8ea0b9;
+  --muted-dim: #5d6e85;
+  --accent: #34e2c4;
+  --accent-dim: rgba(52, 226, 196, 0.16);
+  --accent-line: rgba(52, 226, 196, 0.35);
+  --warm: #ff8a4d;
+  --warm-dim: rgba(255, 138, 77, 0.16);
+  --danger: #ff5d6c;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+.services-page * {
+  box-sizing: border-box;
+}
+
+/* ambient drifting glow behind the entire page */
+.services-page::before {
+  content: "";
+  position: absolute; /* ← was: fixed */
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 12%, var(--accent-dim), transparent 38%),
+    radial-gradient(circle at 82% 68%, var(--warm-dim), transparent 42%),
+    var(--bg);
+  background-size: 160% 160%, 160% 160%, 100% 100%;
+  animation: ambientDrift 26s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes ambientDrift {
+  0%   { background-position: 0% 0%, 100% 100%, 0 0; }
+  100% { background-position: 30% 20%, 70% 80%, 0 0; }
+}
+
+.services-page section {
+  position: relative;
+  z-index: 1;
+  padding: 7rem 6vw;
+}
+
+.services-page h1,
+.services-page h2,
+.services-page h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.services-page p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.services-page button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+/* shared section intro -------------------------------------------------- */
+.section-title {
+  max-width: 640px;
+  margin: 0 0 3.5rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.eyebrow::before {
+  content: "//";
+  color: var(--muted-dim);
+}
+
+.section-title h2 {
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+}
+
+.section-title p {
+  font-size: 1.02rem;
+  max-width: 52ch;
+}
+
+.list-check {
+  color: var(--accent);
+  font-size: 0.7rem;
+  margin-right: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   SECTION 1 — HERO
+   ========================================================================== */
+
+.services-hero {
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  min-height: 88vh;
+}
+
+.radar-field {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1100px;
+  height: 1100px;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.radar-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.radar-ring.ring-1 { inset: 30%; animation: radarPing 4s ease-out infinite; }
+.radar-ring.ring-2 { inset: 18%; animation: radarPing 4s ease-out infinite 1.3s; }
+.radar-ring.ring-3 { inset: 4%;  animation: radarPing 4s ease-out infinite 2.6s; }
+
+@keyframes radarPing {
+  0%   { opacity: 0.55; transform: scale(0.86); border-color: var(--accent-line); }
+  80%  { opacity: 0; }
+  100% { opacity: 0; transform: scale(1.02); }
+}
+
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent-dim) 0deg,
+    transparent 70deg,
+    transparent 360deg
+  );
+  animation: radarSpin 6s linear infinite;
+  mask-image: radial-gradient(circle, black 60%, transparent 100%);
+}
+
+@keyframes radarSpin {
+  to { transform: rotate(360deg); }
+}
+
+.services-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  margin-bottom: 1.6rem;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-line);
+  animation: pulseDot 1.8s ease-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 226, 196, 0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(52, 226, 196, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 226, 196, 0); }
+}
+
+.services-hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.7rem);
+  font-weight: 700;
+  line-height: 1.08;
+  margin-bottom: 1.4rem;
+  background: linear-gradient(120deg, var(--text) 30%, var(--accent) 65%, var(--text) 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: headlineSheen 7s linear infinite;
+}
+
+@keyframes headlineSheen {
+  0%   { background-position: 0% 0; }
+  100% { background-position: -220% 0; }
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+.services-stats {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 3rem;
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.services-stats > * {
+  position: relative;
+  padding: 0 0.5rem;
+}
+
+.services-stats > *:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -1.5rem;
+  top: 10%;
+  bottom: 10%;
+  width: 1px;
+  background: var(--border);
+}
+
+/* ==========================================================================
+   SECTION 2 — SERVICE DOSSIER  (replaces the old catalog grid)
+   ========================================================================== */
+
+.service-dossier {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.dossier-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.dossier-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 3.5rem;
+  align-items: center;
+  padding-bottom: 4rem;
+  border-bottom: 1px dashed var(--border);
+}
+
+.dossier-rows .dossier-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dossier-row-reverse {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+}
+
+.dossier-row-reverse .dossier-image { order: 2; }
+.dossier-row-reverse .dossier-content { order: 1; }
+
+/* ---- image placeholder ---- */
+.dossier-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background:
+    linear-gradient(160deg, var(--surface-alt), var(--bg));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s ease, transform 0.4s ease;
+}
+
+.dossier-row:hover .dossier-image {
+  border-color: var(--accent-line);
+  transform: translateY(-4px);
+}
+
+.dossier-image-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.5;
+  animation: gridDrift 14s linear infinite;
+}
+
+@keyframes gridDrift {
+  to { background-position: 28px 28px, 28px 28px; }
+}
+
+.dossier-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 36%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-dim) 45%,
+    rgba(52, 226, 196, 0.4) 50%,
+    var(--accent-dim) 55%,
+    transparent
+  );
+  filter: blur(1px);
+  animation: scan 5s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%   { transform: translateY(-120%); }
+  50%  { transform: translateY(220%); }
+  100% { transform: translateY(-120%); }
+}
+
+.dossier-image-icon {
+  position: relative;
+  z-index: 1;
+  font-size: 2.6rem;
+  color: var(--muted-dim);
+  opacity: 0.55;
+}
+
+.dossier-image-hint {
+  position: absolute;
+  z-index: 1;
+  bottom: 0.9rem;
+  left: 0.9rem;
+  right: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  color: var(--muted-dim);
+  background: rgba(7, 11, 18, 0.6);
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  text-align: center;
+  backdrop-filter: blur(2px);
+}
+
+.dossier-image-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--accent-line);
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+/* ---- content / case file ---- */
+.dossier-content {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.dossier-content::before {
+  content: attr(data-watermark);
+  position: absolute;
+  top: 0;
+  right: -0.5rem;
+  font-family: var(--font-mono);
+  font-size: 4.4rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  opacity: 0.025;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+.dossier-stamp {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-line);
+  border-radius: 4px;
+  padding: 0.3rem 0.65rem;
+  transform: rotate(-2deg);
+  margin-bottom: 1.1rem;
+}
+
+.dossier-heading {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.dossier-heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-line);
+  color: var(--accent);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.dossier-heading h3 {
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+
+.dossier-summary {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-left: 2px solid var(--accent-line);
+  padding-left: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+.dossier-description {
+  position: relative;
+  z-index: 1;
+  font-size: 0.98rem;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+
+.dossier-capabilities {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dossier-capabilities li {
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.dossier-metric {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.8rem 1.1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface-alt);
+}
+
+.dossier-metric-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.dossier-metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   SECTION 3 — PROCESS
+   ========================================================================== */
+
+.services-process {
+  background: var(--bg);
+}
+
+.process-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.process-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  color: var(--text);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.process-step:hover {
+  background: var(--surface);
+  transform: translateX(4px);
+}
+
+.process-step-active {
+  background: var(--surface);
+  border-color: var(--accent-line);
+  box-shadow: 0 0 0 1px var(--accent-line) inset, 0 10px 30px -18px var(--accent);
+}
+
+.process-index {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--muted-dim);
+  transition: color 0.3s ease;
+}
+
+.process-step-active .process-index {
+  color: var(--accent);
+}
+
+.process-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-size: 1rem;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+.process-step-active .process-icon {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.process-text h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.process-text p {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.process-visual {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.process-visual img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.02);
+}
+
+.process-visual-caption {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text);
+  background: rgba(7, 11, 18, 0.72);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  backdrop-filter: blur(4px);
+}
+
+/* ==========================================================================
+   SECTION 4 — ENGAGEMENT TIERS
+   ========================================================================== */
+
+.services-tiers {
+  background: var(--surface);
+}
+
+.tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.tier-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2.2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-alt);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.tier-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-line);
+  box-shadow: 0 20px 50px -30px rgba(52, 226, 196, 0.45);
+}
+
+.tier-featured {
+  border-color: var(--accent);
+  background: linear-gradient(165deg, rgba(52, 226, 196, 0.09), var(--surface-alt) 60%);
+}
+
+.tier-badge {
+  position: absolute;
+  top: -0.9rem;
+  left: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 0.32rem 0.85rem;
+}
+
+.tier-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.tier-tagline {
+  font-size: 0.88rem;
+  margin-bottom: 1.4rem;
+}
+
+.tier-card ul {
+  list-style: none;
+  margin: 0 0 1.8rem;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+  flex: 1;
+}
+
+.tier-card li {
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.primary-btn,
+.secondary-btn {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  border-radius: 10px;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid transparent;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.primary-btn {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.secondary-btn {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.primary-btn::before,
+.secondary-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -18px var(--accent);
+}
+
+.primary-btn:hover::before,
+.secondary-btn:hover::before {
+  left: 130%;
+}
+
+.secondary-btn:hover {
+  border-color: var(--accent-line);
+}
+
+.primary-btn:focus-visible,
+.secondary-btn:focus-visible,
+.process-step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1080px) {
+  .dossier-row,
+  .dossier-row-reverse {
+    grid-template-columns: 1fr;
+  }
+  .dossier-row-reverse .dossier-image,
+  .dossier-row-reverse .dossier-content {
+    order: initial;
+  }
+  .process-layout {
+    grid-template-columns: 1fr;
+  }
+  .tiers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .services-page section {
+    padding: 4.5rem 6vw;
+  }
+  .services-stats {
+    flex-wrap: wrap;
+    gap: 2rem 2.5rem;
+  }
+  .tiers-grid {
+    grid-template-columns: 1fr;
+  }
+  .dossier-content::before {
+    font-size: 3rem;
+  }
+}
+
+/* ==========================================================================
+   MOTION PREFERENCES
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .services-page,
+  .services-page *,
+  .services-page *::before,
+  .services-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
