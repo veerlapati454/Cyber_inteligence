@@ -10,10 +10,12 @@ import {
 import "./Contact.css";
 import { Reveal } from "../useScrollFx";
 import z4 from "../../assets/z4.webp";
+import { useNavigate } from "react-router-dom";
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const navigate=useNavigate()
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -186,7 +188,7 @@ function Contact() {
         <div className="contact-cta-panel">
           <h2>Still have questions?</h2>
           <p>Our team can walk you through coverage options on a short call.</p>
-          <button className="primary-btn">Schedule a Call</button>
+          <button className="primary-btn" onClick={()=>navigate("/404")}>Schedule a Call</button>
         </div>
       </Reveal>
     </div>

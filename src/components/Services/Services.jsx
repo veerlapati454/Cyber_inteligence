@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaShieldAlt,
   FaBug,
@@ -25,6 +26,7 @@ import z12 from "../../assets/z12.webp";
 
 function Services() {
   const [activeProcess, setActiveProcess] = useState(0);
+  const navigate = useNavigate();
 
   // Each entry below is the full "case file" for one discipline — a short
   // summary for scanning, a longer description for the reader who wants
@@ -248,25 +250,25 @@ function Services() {
               delay={Math.min(index * 60, 240)}
             >
               <div className="dossier-image" aria-hidden="true">
-  <div className="dossier-image-pattern" />
-  <div className="dossier-scanline" />
-  <div className="dossier-image-corner corner-tl" />
-  <div className="dossier-image-corner corner-br" />
+                <div className="dossier-image-pattern" />
+                <div className="dossier-scanline" />
+                <div className="dossier-image-corner corner-tl" />
+                <div className="dossier-image-corner corner-br" />
 
-  {/* Replace icon + hint span with this */}
-  {typeof service.imageHint === "string" && service.imageHint.startsWith("Suggested") ? (
-    <>
-      <div className="dossier-image-icon">{service.icon}</div>
-      <span className="dossier-image-hint">{service.imageHint}</span>
-    </>
-  ) : (
-    <img
-      src={service.imageHint}
-      alt={service.title}
-      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-    />
-  )}
-</div>
+                {/* Replace icon + hint span with this */}
+                {typeof service.imageHint === "string" && service.imageHint.startsWith("Suggested") ? (
+                  <>
+                    <div className="dossier-image-icon">{service.icon}</div>
+                    <span className="dossier-image-hint">{service.imageHint}</span>
+                  </>
+                ) : (
+                  <img
+                    src={service.imageHint}
+                    alt={service.title}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                )}
+              </div>
 
               <div className="dossier-content" data-watermark="CLASSIFIED">
                 <span className="dossier-stamp">Case File · {service.code}</span>
@@ -360,7 +362,10 @@ function Services() {
                   </li>
                 ))}
               </ul>
-              <button className={tier.featured ? "primary-btn" : "secondary-btn"}>
+              <button
+                className={tier.featured ? "primary-btn" : "secondary-btn"}
+                onClick={() => navigate("/404")}
+              >
                 Talk to Us
               </button>
             </Reveal>

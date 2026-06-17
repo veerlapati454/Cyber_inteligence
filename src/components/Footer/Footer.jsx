@@ -8,10 +8,12 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./Footer.css";
 import logo from "../../assets/stackly_logo.webp"
 function Footer() {
+  const navigate=useNavigate()
   return (
     <footer className="footer" id="contact">
       <div className="footer-container">
@@ -20,10 +22,11 @@ function Footer() {
         <div className="footer-about">
 
           {/* Logo Placeholder */}
-          <div className="footer-logo">
+          <div className="footer-logo" onClick={()=>navigate("/")}>
             <img
               src={logo}
               alt="CyberIntel Logo"
+              
             />
           </div>
 

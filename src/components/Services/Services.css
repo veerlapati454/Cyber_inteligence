@@ -190,6 +190,7 @@
   position: relative;
   z-index: 2;
   max-width: 760px;
+  padding-top: 15px;
 }
 
 .hero-tag {
@@ -257,6 +258,13 @@
   margin-top: 3.5rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--border);
+}
+
+.services-stats {
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem 2.5rem;
 }
 
 .services-stats > * {

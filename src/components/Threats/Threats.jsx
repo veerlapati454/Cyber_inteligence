@@ -17,11 +17,12 @@ import z13 from "../../assets/z13.webp";
 import z14 from "../../assets/z14.webp";
 import z15 from "../../assets/z15.webp";
 import z16  from "../../assets/z16.webp";
+import { useNavigate } from "react-router-dom";
 
 
 function Threats() {
   const [filter, setFilter] = useState("all");
-
+  const navigate=useNavigate()
   // Full profile for each threat category: a quick summary, the longer
   // explanation, the warning signs a team would actually see, a five-stage
   // attack chain, trend direction, a supporting metric, and a hint for the
@@ -331,7 +332,7 @@ function Threats() {
             Our monitoring network spans every major time zone, correlating activity the
             moment it surfaces rather than batching it into a morning report.
           </p>
-          <button className="primary-btn">Get a Live Briefing</button>
+          <button className="primary-btn" onClick={()=>navigate("/404")}>Get a Live Briefing</button>
         </Reveal>
       </section>
     </div>

@@ -10,6 +10,7 @@ import { HiArrowLeft } from "react-icons/hi";
 import { toast } from "react-toastify";
 import "./Signup.css";
 
+
 function Signup() {
   const navigate = useNavigate();
 
@@ -322,6 +323,7 @@ function Signup() {
             <button
               type="button"
               className="google-btn"
+              onClick={()=>navigate("/404")}
             >
               <FaGoogle />
               Continue with Google
@@ -330,6 +332,7 @@ function Signup() {
             <button
               type="button"
               className="facebook-btn"
+              onClick={()=>navigate("/404")}
             >
               <FaFacebookF />
               Continue with Facebook
