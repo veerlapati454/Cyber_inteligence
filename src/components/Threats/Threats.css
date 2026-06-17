@@ -334,10 +334,7 @@
 .threat-image {
   position: relative;
   aspect-ratio: 4 / 3;
-  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--border-strong);
-  background: linear-gradient(160deg, var(--surface-alt), var(--bg));
   display: flex;
   align-items: center;
   justify-content: center;

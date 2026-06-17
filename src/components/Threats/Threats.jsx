@@ -13,6 +13,11 @@ import {
 import "./Threats.css";
 import { Reveal, StatCard, DecodeText } from "../useScrollFx";
 import z3 from "../../assets/z3.webp";
+import z13 from "../../assets/z13.webp";
+import z14 from "../../assets/z14.webp";
+import z15 from "../../assets/z15.webp";
+import z16  from "../../assets/z16.webp";
+
 
 function Threats() {
   const [filter, setFilter] = useState("all");
@@ -45,6 +50,8 @@ function Threats() {
       ],
       trendDirection: "up",
       trendLabel: "+18% this month",
+        image: z13,
+
       metricExtra: { value: "4.5 days", label: "average dwell time before detonation" },
       imageHint: "Suggested image — encrypted file directory or a ransom note screen",
     },
@@ -69,6 +76,8 @@ function Threats() {
         "Credential Capture",
         "Account Takeover",
       ],
+              image: z14,
+
       trendDirection: "up",
       trendLabel: "+9% this month",
       metricExtra: { value: "94 sec", label: "average time to first click" },
@@ -88,6 +97,8 @@ function Threats() {
         "Default credentials still active on network hardware",
         "DNS requests resolving to known command-and-control domains",
       ],
+              image: z15,
+
       chain: [
         "Device Scanning",
         "Credential Exploit",
@@ -121,6 +132,8 @@ function Threats() {
         "Adaptive Targeting",
         "Extortion or Distraction",
       ],
+              image: z16,
+
       trendDirection: "down",
       trendLabel: "−4% this month",
       metricExtra: { value: "1.2 Tbps", label: "largest flood mitigated this quarter" },
@@ -202,13 +215,19 @@ function Threats() {
               delay={Math.min(index * 70, 280)}
             >
               <div className="threat-image" data-trend={profile.trendDirection} aria-hidden="true">
-                <div className="threat-image-pattern" />
-                <div className="threat-scanline" />
-                <div className="threat-image-corner corner-tl" />
-                <div className="threat-image-corner corner-br" />
-                <div className="threat-image-icon">{profile.icon}</div>
-                <span className="threat-image-hint">{profile.imageHint}</span>
-              </div>
+  {profile.image ? (
+    <img src={profile.image} alt={profile.imageAlt} className="threat-image-real" />
+  ) : (
+    <>
+      <div className="threat-image-pattern" />
+      <div className="threat-scanline" />
+      <div className="threat-image-corner corner-tl" />
+      <div className="threat-image-corner corner-br" />
+      <div className="threat-image-icon">{profile.icon}</div>
+      <span className="threat-image-hint">{profile.imageHint}</span>
+    </>
+  )}
+</div>
 
               <div className="threat-content" data-trend={profile.trendDirection}>
                 <div className="threat-tagrow">

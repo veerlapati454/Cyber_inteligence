@@ -16,6 +16,12 @@ import {
 import "./Services.css";
 import { Reveal, StatCard } from "../useScrollFx";
 import z2 from "../../assets/z2.webp";
+import z7 from "../../assets/z7.webp";
+import z8 from "../../assets/z8.webp";
+import z9 from "../../assets/z9.webp";
+import z10 from "../../assets/z10.webp";
+import z11 from "../../assets/z11.webp";
+import z12 from "../../assets/z12.webp";
 
 function Services() {
   const [activeProcess, setActiveProcess] = useState(0);
@@ -41,7 +47,7 @@ function Services() {
         "Direct feed into your SOC and SIEM tooling",
       ],
       metric: { value: "40K+", label: "indicators correlated daily" },
-      imageHint: "Suggested image — analyst console with a live indicator feed and threat map",
+      imageHint: z7,
     },
     {
       code: "MA-02",
@@ -59,7 +65,7 @@ function Services() {
         "Written report mapped to MITRE ATT&CK",
       ],
       metric: { value: "6 hrs", label: "average report turnaround" },
-      imageHint: "Suggested image — disassembly view or sandbox detonation timeline",
+      imageHint: z8,
     },
     {
       code: "SA-03",
@@ -77,7 +83,7 @@ function Services() {
         "Live remediation walkthrough with your engineers",
       ],
       metric: { value: "98%", label: "of critical findings closed within 30 days" },
-      imageHint: "Suggested image — attack-path diagram or findings dashboard",
+      imageHint: z9,
     },
     {
       code: "SM-04",
@@ -95,7 +101,7 @@ function Services() {
         "A named analyst on call, not a ticket queue",
       ],
       metric: { value: "<9 min", label: "mean time to triage an alert" },
-      imageHint: "Suggested image — SOC floor or live monitoring wall",
+      imageHint: z10,
     },
     {
       code: "DW-05",
@@ -113,7 +119,7 @@ function Services() {
         "Exposure reports tied to specific employees or systems",
       ],
       metric: { value: "24 hrs", label: "from listing to client alert" },
-      imageHint: "Suggested image — dark web monitoring interface or leak alert dashboard",
+      imageHint: z11,
     },
     {
       code: "IR-06",
@@ -131,7 +137,7 @@ function Services() {
         "Post-incident hardening plan with owners and deadlines",
       ],
       metric: { value: "<1 hr", label: "responder dispatch, any hour" },
-      imageHint: "Suggested image — incident war-room or forensic timeline view",
+      imageHint: z12,
     },
   ];
 
@@ -242,13 +248,25 @@ function Services() {
               delay={Math.min(index * 60, 240)}
             >
               <div className="dossier-image" aria-hidden="true">
-                <div className="dossier-image-pattern" />
-                <div className="dossier-scanline" />
-                <div className="dossier-image-corner corner-tl" />
-                <div className="dossier-image-corner corner-br" />
-                <div className="dossier-image-icon">{service.icon}</div>
-                <span className="dossier-image-hint">{service.imageHint}</span>
-              </div>
+  <div className="dossier-image-pattern" />
+  <div className="dossier-scanline" />
+  <div className="dossier-image-corner corner-tl" />
+  <div className="dossier-image-corner corner-br" />
+
+  {/* Replace icon + hint span with this */}
+  {typeof service.imageHint === "string" && service.imageHint.startsWith("Suggested") ? (
+    <>
+      <div className="dossier-image-icon">{service.icon}</div>
+      <span className="dossier-image-hint">{service.imageHint}</span>
+    </>
+  ) : (
+    <img
+      src={service.imageHint}
+      alt={service.title}
+      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+    />
+  )}
+</div>
 
               <div className="dossier-content" data-watermark="CLASSIFIED">
                 <span className="dossier-stamp">Case File · {service.code}</span>
