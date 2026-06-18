@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 
 import "./Contact.css";
-import { Reveal } from "../useScrollFx";
 import z4 from "../../assets/z4.webp";
 import { useNavigate } from "react-router-dom";
 
@@ -138,13 +137,6 @@ function Contact() {
     <div className="contact-page">
       {/* HERO */}
       <section className="contact-hero">
-        <div className="radar-field" aria-hidden="true">
-          <span className="radar-ring ring-1" />
-          <span className="radar-ring ring-2" />
-          <span className="radar-ring ring-3" />
-          <span className="radar-sweep" />
-        </div>
-
         <div className="contact-hero-content">
           <span className="hero-tag">
             <span className="pulse-dot" />
@@ -163,7 +155,7 @@ function Contact() {
 
       {/* FORM + CHANNELS */}
       <section className="contact-main" id="form">
-        <Reveal className="contact-form-wrap" as="div">
+        <div className="contact-form-wrap">
           <h2>Send a Message</h2>
           <p>
             Tell us about your environment and what you're looking to solve.
@@ -246,15 +238,11 @@ function Contact() {
               </button>
             </form>
           )}
-        </Reveal>
+        </div>
 
         <div className="contact-channels">
           {channels.map((channel, index) => (
-            <Reveal
-              key={index}
-              className="channel-card"
-              delay={index * 90}
-            >
+            <div key={index} className="channel-card">
               <div className="channel-icon">{channel.icon}</div>
 
               <div>
@@ -262,30 +250,26 @@ function Contact() {
                 <p className="channel-detail">{channel.detail}</p>
                 <p className="channel-note">{channel.note}</p>
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
       </section>
 
       {/* OFFICES */}
       <section className="contact-offices" id="offices">
-        <Reveal className="section-title" as="div">
+        <div className="section-title">
           <span className="eyebrow">Where We Are</span>
           <h2>Global Footprint, Local Response</h2>
-        </Reveal>
+        </div>
 
         <div className="offices-grid">
-          <Reveal className="offices-image" as="div">
+          <div className="offices-image">
             <img src={z4} alt="CyberIntel global operations" />
-          </Reveal>
+          </div>
 
           <div className="offices-list">
             {offices.map((office, index) => (
-              <Reveal
-                key={index}
-                className="office-card"
-                delay={index * 90}
-              >
+              <div key={index} className="office-card">
                 <FaMapMarkerAlt className="office-icon" />
 
                 <div>
@@ -295,14 +279,14 @@ function Contact() {
                   </span>
                   <p>{office.address}</p>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* FAQ + CTA */}
-      <Reveal className="contact-cta" as="section">
+      <section className="contact-cta">
         <div className="faq-list">
           <span className="eyebrow">Before You Write In</span>
           <h2>Common Questions</h2>
@@ -329,7 +313,7 @@ function Contact() {
             Schedule a Call
           </button>
         </div>
-      </Reveal>
+      </section>
 
       {/* TOAST CONTAINER */}
       <div className="toast-container" aria-live="polite" aria-atomic="true">

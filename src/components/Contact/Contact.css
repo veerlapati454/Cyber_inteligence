@@ -12,23 +12,26 @@
   background: var(--bg-deep);
   color: var(--text-primary);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow-x: hidden;
-  /* Hint browser that this element scrolls for passive listener optimization */
-  will-change: scroll-position;
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ============================================================
-   HERO TAG & PULSE
+   ONE-TIME PAGE-LOAD FADE (no scroll listeners, no observers)
+   ============================================================ */
+
+.contact-page > * {
+  animation: pageFadeIn 0.5s ease both;
+}
+.contact-page > *:nth-child(2) { animation-delay: 0.05s; }
+.contact-page > *:nth-child(3) { animation-delay: 0.1s; }
+.contact-page > *:nth-child(4) { animation-delay: 0.15s; }
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   HERO TAG
    ============================================================ */
 
 .hero-tag {
@@ -49,70 +52,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--accent);
-  animation: pulse 1.8s infinite;
   flex-shrink: 0;
-  /* GPU layer for pulse animation */
-  will-change: box-shadow;
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5); }
-  70%  { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
-}
-
-/* ============================================================
-   RADAR  —  GPU-composited so it never blocks scroll
-   ============================================================ */
-
-.radar-field {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.3;
-  /* Isolate compositing so children don't affect page stacking */
-  isolation: isolate;
-  contain: strict;
-}
-
-.radar-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-  opacity: 0.25;
-  transform: translate(-50%, -50%);
-  /* Static rings don't need will-change */
-}
-.ring-1 { width: 260px; height: 260px; }
-.ring-2 { width: 440px; height: 440px; }
-.ring-3 { width: 620px; height: 620px; }
-
-.radar-sweep {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    var(--accent-soft) 40deg,
-    transparent 80deg
-  );
-  /* translateZ(0) forces its own GPU compositor layer */
-  transform: translate(-50%, -50%) translateZ(0);
-  will-change: transform;
-  animation: sweep 4s linear infinite;
-  /* Contain paint so repaints stay inside this element */
-  contain: strict;
-}
-
-@keyframes sweep {
-  from { transform: translate(-50%, -50%) translateZ(0) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) translateZ(0) rotate(360deg); }
 }
 
 /* ============================================================
@@ -169,12 +109,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Isolate hero so the radar layer doesn't bleed into page compositing */
-  isolation: isolate;
+  background: radial-gradient(
+    ellipse 600px 360px at 50% 0%,
+    var(--accent-soft),
+    transparent 70%
+  );
 }
 .contact-hero-content {
-  position: relative;
-  z-index: 2;
   max-width: 680px;
   padding-top: 20px;
 }
@@ -593,15 +534,10 @@
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .radar-sweep,
-  .pulse-dot {
+  .contact-page > *,
+  .toast {
     animation: none !important;
-    transition: none !important;
     opacity: 1 !important;
     transform: none !important;
-  }
-  @keyframes toastSlideIn {
-    from { opacity: 1; transform: none; }
   }
 }
