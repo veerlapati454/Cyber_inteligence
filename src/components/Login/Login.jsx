@@ -40,7 +40,7 @@ function Login() {
       setEmailSuccess("");
     } else {
       setEmailError("");
-      
+      setEmailSuccess("");
     }
   };
 
@@ -98,14 +98,8 @@ function Login() {
         <div className="role-switch">
           <button
             type="button"
-            className={
-              role === "user"
-                ? "active-role"
-                : ""
-            }
-            onClick={() =>
-              setRole("user")
-            }
+            className={role === "user" ? "active-role" : ""}
+            onClick={() => setRole("user")}
           >
             <FaUser />
             User
@@ -113,14 +107,8 @@ function Login() {
 
           <button
             type="button"
-            className={
-              role === "admin"
-                ? "active-role"
-                : ""
-            }
-            onClick={() =>
-              setRole("admin")
-            }
+            className={role === "admin" ? "active-role" : ""}
+            onClick={() => setRole("admin")}
           >
             <FaUserShield />
             Admin
@@ -137,9 +125,7 @@ function Login() {
               type="email"
               placeholder="example@gmail.com"
               value={email}
-              onChange={
-                handleEmailChange
-              }
+              onChange={handleEmailChange}
             />
 
             {emailError && (
@@ -161,34 +147,27 @@ function Login() {
 
             <div className="password-box">
               <input
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter Password"
                 value={password}
-                onChange={(e) =>
-                  setPassword(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
               />
 
               <span
-                onClick={() =>
-                  setShowPassword(
-                    !showPassword
-                  )
-                }
+                className="toggle-eye"
+                onClick={() => setShowPassword(!showPassword)}
+                role="button"
+                aria-label="Toggle password visibility"
               >
-                {showPassword ? (
-                  <FaEyeSlash />
-                ) : (
-                  <FaEye />
-                )}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
+          </div>
+
+          {/* Forgot Password */}
+          <div className="forgot-password">
+            <Link to="/404">Forgot Password?</Link>
           </div>
 
           {/* Login Button */}

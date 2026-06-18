@@ -6,12 +6,12 @@ import {
   FaBell, FaCog, FaSignOutAlt, FaBars, FaTimes,
   FaSearch, FaArrowUp, FaArrowDown,
   FaCheckCircle, FaExclamationTriangle, FaTimesCircle,
-  FaEllipsisH, FaFilter, FaDownload, FaToggleOn, FaToggleOff,
-  FaEdit, FaTrashAlt, FaEye,
+  FaFilter, FaDownload, FaEdit, FaTrashAlt, FaEye,
 } from "react-icons/fa";
 import "./AdminDashboard.css";
 import logo from "../../assets/stackly_logo.webp";
 import { useNavigate } from "react-router-dom";
+
 /* ─── Count-up hook ─────────────────────────────────────────────────── */
 function useCountUp(end, duration = 1500) {
   const [val, setVal] = useState(0);
@@ -120,82 +120,113 @@ export default function AdminDashboard() {
   const [activeNav, setActiveNav] = useState("overview");
   const [searchVal, setSearchVal] = useState("");
   const [userToggles, setUserToggles] = useState({ 1: true, 2: true, 3: false, 4: true, 5: true });
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const mainRef = useRef(null);
+  const contentRef = useRef(null);
+
   const navGroups = [
     {
       label: "Main",
       items: [
-        { id: "overview",    icon: <FaHome />,         label: "Overview"       },
-        { id: "analytics",   icon: <FaChartLine />,    label: "Analytics"      },
-        { id: "reports",     icon: <FaChartBar />,     label: "Reports"        },
+        { id: "overview",  icon: <FaHome />,         label: "Overview"       },
+        { id: "analytics", icon: <FaChartLine />,    label: "Analytics"      },
+        { id: "reports",   icon: <FaChartBar />,     label: "Reports"        },
       ],
     },
     {
       label: "User Management",
       items: [
-        { id: "users",       icon: <FaUsers />,        label: "All Users",    badge: "2.4k" },
-        { id: "roles",       icon: <FaUserShield />,   label: "Roles & Perms" },
-        { id: "admins",      icon: <FaUserCog />,      label: "Admins"        },
-        { id: "invite",      icon: <FaUserPlus />,     label: "Invite Users"  },
+        { id: "users",  icon: <FaUsers />,      label: "All Users",    badge: "2.4k" },
+        { id: "roles",  icon: <FaUserShield />, label: "Roles & Perms" },
+        { id: "admins", icon: <FaUserCog />,    label: "Admins"        },
+        { id: "invite", icon: <FaUserPlus />,   label: "Invite Users"  },
       ],
     },
     {
       label: "System",
       items: [
-        { id: "access",      icon: <FaKey />,          label: "Access Tokens" },
-        { id: "audit",       icon: <FaClipboardList />,label: "Audit Logs",   badge: "18" },
-        { id: "database",    icon: <FaDatabase />,     label: "Database"      },
-        { id: "servers",     icon: <FaServer />,       label: "Servers"       },
+        { id: "access",   icon: <FaKey />,           label: "Access Tokens" },
+        { id: "audit",    icon: <FaClipboardList />,  label: "Audit Logs",   badge: "18" },
+        { id: "database", icon: <FaDatabase />,       label: "Database"      },
+        { id: "servers",  icon: <FaServer />,         label: "Servers"       },
       ],
     },
   ];
 
   const stats = [
-    { value: 24381, label: "Total Users",      icon: <FaUsers />,       trend: 12,  trendLabel: "vs last month", color: "blue"   },
-    { value: 1842,  label: "Active Sessions",  icon: <FaServer />,      trend: 8,   trendLabel: "vs yesterday",  color: "cyan"   },
-    { value: 98,    suffix: "%", label: "System Uptime", icon: <FaCheckCircle />, trend: 0, trendLabel: "30-day avg", color: "green"  },
-    { value: 47,    label: "Pending Reviews",  icon: <FaExclamationTriangle />, trend: -5, trendLabel: "vs last week", color: "orange" },
+    { value: 24381, label: "Total Users",      icon: <FaUsers />,               trend: 12, trendLabel: "vs last month", color: "blue"   },
+    { value: 1842,  label: "Active Sessions",  icon: <FaServer />,              trend: 8,  trendLabel: "vs yesterday",  color: "cyan"   },
+    { value: 98, suffix: "%", label: "System Uptime", icon: <FaCheckCircle />, trend: 0,  trendLabel: "30-day avg",    color: "green"  },
+    { value: 47,    label: "Pending Reviews",  icon: <FaExclamationTriangle />, trend: -5, trendLabel: "vs last week",  color: "orange" },
   ];
 
   const users = [
-    { id: "USR-001", name: "Arjun Sharma",    email: "arjun@acme.io",   role: "Admin",   joined: "Jan 12, 2025", status: "active"    },
-    { id: "USR-002", name: "Priya Reddy",     email: "priya@acme.io",   role: "Editor",  joined: "Feb 04, 2025", status: "active"    },
-    { id: "USR-003", name: "Rohan Mehta",     email: "rohan@acme.io",   role: "Viewer",  joined: "Mar 19, 2025", status: "suspended" },
-    { id: "USR-004", name: "Sneha Iyer",      email: "sneha@acme.io",   role: "Editor",  joined: "Apr 02, 2025", status: "active"    },
-    { id: "USR-005", name: "Vikram Das",      email: "vikram@acme.io",  role: "Admin",   joined: "May 30, 2025", status: "active"    },
+    { id: "USR-001", name: "Arjun Sharma",  email: "arjun@acme.io",  role: "Admin",  joined: "Jan 12, 2025", status: "active"    },
+    { id: "USR-002", name: "Priya Reddy",   email: "priya@acme.io",  role: "Editor", joined: "Feb 04, 2025", status: "active"    },
+    { id: "USR-003", name: "Rohan Mehta",   email: "rohan@acme.io",  role: "Viewer", joined: "Mar 19, 2025", status: "suspended" },
+    { id: "USR-004", name: "Sneha Iyer",    email: "sneha@acme.io",  role: "Editor", joined: "Apr 02, 2025", status: "active"    },
+    { id: "USR-005", name: "Vikram Das",    email: "vikram@acme.io", role: "Admin",  joined: "May 30, 2025", status: "active"    },
   ];
 
   const roleData = [
-    { label: "Admin",   value: 38,   color: "#00e5ff" },
-    { label: "Editor",  value: 620,  color: "#0a84ff" },
-    { label: "Viewer",  value: 1840, color: "#00c97a" },
-    { label: "Guest",   value: 512,  color: "#ff8c00" },
+    { label: "Admin",  value: 38,   color: "#00e5ff" },
+    { label: "Editor", value: 620,  color: "#0a84ff" },
+    { label: "Viewer", value: 1840, color: "#00c97a" },
+    { label: "Guest",  value: 512,  color: "#ff8c00" },
   ];
 
-  const loginData = [210, 340, 290, 480, 390, 560, 440, 680, 520, 740, 600, 820];
+  const loginData  = [210, 340, 290, 480, 390, 560, 440, 680, 520, 740, 600, 820];
   const signupData = [40,  80,  60,  110, 90,  140, 100, 160, 120, 180, 140, 200];
 
   const auditLogs = [
-    { action: "User deleted",        actor: "admin@acme.io",  target: "USR-019", severity: "high",   time: "3m ago"  },
-    { action: "Role changed: Admin", actor: "admin@acme.io",  target: "USR-002", severity: "high",   time: "12m ago" },
-    { action: "Login success",       actor: "priya@acme.io",  target: "—",       severity: "info",   time: "18m ago" },
-    { action: "Password reset",      actor: "rohan@acme.io",  target: "—",       severity: "medium", time: "34m ago" },
-    { action: "Export: users.csv",   actor: "sneha@acme.io",  target: "—",       severity: "medium", time: "1h ago"  },
-    { action: "Failed login ×5",     actor: "unknown",         target: "—",       severity: "high",   time: "2h ago"  },
+    { action: "User deleted",        actor: "admin@acme.io", target: "USR-019", severity: "high",   time: "3m ago"  },
+    { action: "Role changed: Admin", actor: "admin@acme.io", target: "USR-002", severity: "high",   time: "12m ago" },
+    { action: "Login success",       actor: "priya@acme.io", target: "—",       severity: "info",   time: "18m ago" },
+    { action: "Password reset",      actor: "rohan@acme.io", target: "—",       severity: "medium", time: "34m ago" },
+    { action: "Export: users.csv",   actor: "sneha@acme.io", target: "—",       severity: "medium", time: "1h ago"  },
+    { action: "Failed login ×5",     actor: "unknown",        target: "—",       severity: "high",   time: "2h ago"  },
   ];
 
   const servers = [
-    { name: "API Gateway",   cpu: 34, mem: 52, status: "healthy" },
-    { name: "Auth Service",  cpu: 61, mem: 74, status: "warning" },
-    { name: "DB Primary",    cpu: 22, mem: 41, status: "healthy" },
-    { name: "CDN Edge",      cpu: 8,  mem: 18, status: "healthy" },
+    { name: "API Gateway",  cpu: 34, mem: 52, status: "healthy" },
+    { name: "Auth Service", cpu: 61, mem: 74, status: "warning" },
+    { name: "DB Primary",   cpu: 22, mem: 41, status: "healthy" },
+    { name: "CDN Edge",     cpu: 8,  mem: 18, status: "healthy" },
   ];
+
+  /* ─── Nav click handler ─────────────────────────────────────────── */
+  const handleNavClick = (id) => {
+    setActiveNav(id);
+    setSidebarOpen(false);
+
+    if (id === "overview") {
+      // Target every possible scroll container
+      const targets = [
+        mainRef.current,
+        contentRef.current,
+        document.documentElement,
+        document.body,
+        document.querySelector(".adm-main"),
+        document.querySelector(".adm-content"),
+        document.querySelector(".adm-layout"),
+      ];
+      targets.forEach((el) => {
+        if (el) {
+          try {
+            el.scrollTo({ top: 0, behavior: "smooth" });
+          } catch {
+            el.scrollTop = 0;
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/404");
+    }
+  };
 
   return (
     <div className={`adm-layout ${sidebarOpen ? "sidebar-expanded" : ""}`}>
-
-      {/* ── Background grid ─────────────────────────────────────────── */}
-      {/* handled by CSS ::before / ::after */}
 
       {/* ── Sidebar ─────────────────────────────────────────────────── */}
       <aside className={`adm-sidebar ${sidebarOpen ? "open" : ""}`}>
@@ -217,7 +248,7 @@ export default function AdminDashboard() {
                 <button
                   key={item.id}
                   className={`adm-nav-item ${activeNav === item.id ? "active" : ""}`}
-                  onClick={() => { setActiveNav(item.id); setSidebarOpen(false); }}
+                  onClick={() => handleNavClick(item.id)}
                 >
                   <span className="adm-nav-item__icon">{item.icon}</span>
                   <span className="adm-nav-item__label">{item.label}</span>
@@ -237,11 +268,11 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="adm-sidebar__footer-actions">
-            <button className="adm-nav-item">
+            <button className="adm-nav-item" onClick={() => navigate("/404")}>
               <span className="adm-nav-item__icon"><FaCog /></span>
               <span className="adm-nav-item__label">Settings</span>
             </button>
-            <button className="adm-nav-item adm-nav-item--logout" onClick={()=>navigate("/login")}>
+            <button className="adm-nav-item adm-nav-item--logout" onClick={() => navigate("/login")}>
               <span className="adm-nav-item__icon"><FaSignOutAlt /></span>
               <span className="adm-nav-item__label">Sign Out</span>
             </button>
@@ -254,7 +285,7 @@ export default function AdminDashboard() {
       )}
 
       {/* ── Main ────────────────────────────────────────────────────── */}
-      <main className="adm-main">
+      <main className="adm-main" ref={mainRef}>
 
         {/* Topbar */}
         <header className="adm-topbar">
@@ -275,30 +306,30 @@ export default function AdminDashboard() {
           <div className="adm-topbar__right">
             <div className="adm-topbar__env">
               <span className="adm-env-dot" />
-              Production
+              <span className="adm-env-label">Production</span>
             </div>
-            <button className="adm-topbar__notif">
+            <button className="adm-topbar__notif" onClick={() => navigate("/404")}>
               <FaBell />
               <span className="adm-notif-badge">5</span>
             </button>
-            <div className="adm-topbar__avatar">SA</div>
+            <div className="adm-topbar__avatar" onClick={() => navigate("/404")} style={{ cursor: "pointer" }}>SA</div>
           </div>
         </header>
 
         {/* Content */}
-        <div className="adm-content">
+        <div className="adm-content" ref={contentRef}>
 
           {/* Page header */}
           <div className="adm-page-header">
-            <div>
+            <div className="adm-page-header__text">
               <h1>Admin Dashboard</h1>
               <p>Manage users, roles, system health, and audit logs from one place.</p>
             </div>
             <div className="adm-page-header__actions">
-              <button className="adm-btn adm-btn--ghost">
+              <button className="adm-btn adm-btn--ghost" onClick={() => navigate("/404")}>
                 <FaDownload /> Export
               </button>
-              <button className="adm-btn adm-btn--primary">
+              <button className="adm-btn adm-btn--primary" onClick={() => navigate("/404")}>
                 <FaUserPlus /> Add User
               </button>
             </div>
@@ -309,10 +340,9 @@ export default function AdminDashboard() {
             {stats.map((s, i) => <StatCard key={i} {...s} />)}
           </div>
 
-          {/* Mid row — activity charts + role donut */}
+          {/* Mid row — activity + donut + servers */}
           <div className="adm-mid-row">
 
-            {/* Login & signup activity */}
             <div className="adm-card adm-activity-card">
               <div className="adm-card__header">
                 <h2>User Activity</h2>
@@ -343,7 +373,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Role distribution donut */}
             <div className="adm-card adm-donut-card">
               <div className="adm-card__header">
                 <h2>Role Distribution</h2>
@@ -363,7 +392,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Server health */}
             <div className="adm-card adm-servers-card">
               <div className="adm-card__header">
                 <h2>Server Health</h2>
@@ -416,9 +444,9 @@ export default function AdminDashboard() {
             <div className="adm-card__header">
               <h2>User Management</h2>
               <div className="adm-card__header-actions">
-                <button className="adm-icon-btn"><FaFilter /></button>
-                <button className="adm-icon-btn"><FaDownload /></button>
-                <button className="adm-btn adm-btn--primary adm-btn--sm">
+                <button className="adm-icon-btn" onClick={() => navigate("/404")}><FaFilter /></button>
+                <button className="adm-icon-btn" onClick={() => navigate("/404")}><FaDownload /></button>
+                <button className="adm-btn adm-btn--primary adm-btn--sm" onClick={() => navigate("/404")}>
                   <FaUserPlus /> Add
                 </button>
               </div>
@@ -431,43 +459,47 @@ export default function AdminDashboard() {
                     <th>Role</th>
                     <th className="hide-sm">Joined</th>
                     <th>Status</th>
-                    <th>Active</th>
+                    <th className="hide-xs">Active</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((u) => (
+                  {users.map((u, idx) => (
                     <tr key={u.id}>
                       <td>
                         <div className="adm-user-cell">
-                          <div className="adm-user-avatar">{u.name.split(" ").map(n => n[0]).join("")}</div>
-                          <div>
+                          <div className="adm-user-avatar">
+                            {u.name.split(" ").map(n => n[0]).join("")}
+                          </div>
+                          <div className="adm-user-info">
                             <div className="adm-user-name">{u.name}</div>
                             <div className="adm-user-email">{u.email}</div>
                           </div>
                         </div>
                       </td>
                       <td>
-                        <span className={`adm-role-badge adm-role-badge--${u.role.toLowerCase()}`}>{u.role}</span>
+                        <span className={`adm-role-badge adm-role-badge--${u.role.toLowerCase()}`}>
+                          {u.role}
+                        </span>
                       </td>
                       <td className="hide-sm adm-muted">{u.joined}</td>
                       <td>
                         <span className={`adm-status adm-status--${u.status}`}>
                           {u.status === "active" ? <FaCheckCircle /> : <FaTimesCircle />}
-                          {u.status}
+                          <span className="adm-status-label">{u.status}</span>
                         </span>
                       </td>
-                      <td>
+                      <td className="hide-xs">
                         <Toggle
-                          active={userToggles[users.indexOf(u) + 1]}
-                          onChange={(v) => setUserToggles(p => ({ ...p, [users.indexOf(u) + 1]: v }))}
+                          active={userToggles[idx + 1]}
+                          onChange={(v) => setUserToggles(p => ({ ...p, [idx + 1]: v }))}
                         />
                       </td>
                       <td>
                         <div className="adm-action-btns">
-                          <button className="adm-action-btn adm-action-btn--view"  title="View"><FaEye /></button>
-                          <button className="adm-action-btn adm-action-btn--edit"  title="Edit"><FaEdit /></button>
-                          <button className="adm-action-btn adm-action-btn--delete" title="Delete"><FaTrashAlt /></button>
+                          <button className="adm-action-btn adm-action-btn--view"   title="View"   onClick={() => navigate("/404")}><FaEye /></button>
+                          <button className="adm-action-btn adm-action-btn--edit"   title="Edit"   onClick={() => navigate("/404")}><FaEdit /></button>
+                          <button className="adm-action-btn adm-action-btn--delete" title="Delete" onClick={() => navigate("/404")}><FaTrashAlt /></button>
                         </div>
                       </td>
                     </tr>
@@ -479,12 +511,12 @@ export default function AdminDashboard() {
               <span className="adm-muted">Showing 5 of 2,438 users</span>
               <div className="adm-pagination">
                 <button className="adm-page-btn" disabled>‹</button>
-                <button className="adm-page-btn active">1</button>
-                <button className="adm-page-btn">2</button>
-                <button className="adm-page-btn">3</button>
+                <button className="adm-page-btn active" onClick={() => navigate("/404")}>1</button>
+                <button className="adm-page-btn" onClick={() => navigate("/404")}>2</button>
+                <button className="adm-page-btn" onClick={() => navigate("/404")}>3</button>
                 <span className="adm-muted">…</span>
-                <button className="adm-page-btn">488</button>
-                <button className="adm-page-btn">›</button>
+                <button className="adm-page-btn" onClick={() => navigate("/404")}>488</button>
+                <button className="adm-page-btn" onClick={() => navigate("/404")}>›</button>
               </div>
             </div>
           </div>
@@ -492,19 +524,16 @@ export default function AdminDashboard() {
           {/* Bottom row — audit log + quick actions */}
           <div className="adm-bottom-row">
 
-            {/* Audit log */}
             <div className="adm-card adm-audit-card">
               <div className="adm-card__header">
                 <h2>Audit Log</h2>
-                <button className="adm-card__btn">View all</button>
+                <button className="adm-card__btn" onClick={() => navigate("/404")}>View all</button>
               </div>
               <div className="adm-audit-list">
                 {auditLogs.map((log, i) => (
                   <div className="adm-audit-row" key={i}>
                     <span className={`adm-audit-sev adm-audit-sev--${log.severity}`}>
-                      {log.severity === "high"   ? <FaExclamationTriangle /> :
-                       log.severity === "medium" ? <FaExclamationTriangle /> :
-                                                   <FaCheckCircle />}
+                      {log.severity === "info" ? <FaCheckCircle /> : <FaExclamationTriangle />}
                     </span>
                     <div className="adm-audit-body">
                       <p>{log.action}</p>
@@ -516,23 +545,26 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Quick actions */}
             <div className="adm-card adm-quick-card">
               <div className="adm-card__header">
                 <h2>Quick Actions</h2>
               </div>
               <div className="adm-quick-grid">
                 {[
-                  { icon: <FaUserPlus />,      label: "Add User",       color: "blue"   },
-                  { icon: <FaUserShield />,    label: "Manage Roles",   color: "cyan"   },
-                  { icon: <FaKey />,           label: "Revoke Token",   color: "orange" },
-                  { icon: <FaDatabase />,      label: "Backup DB",      color: "green"  },
-                  { icon: <FaClipboardList />, label: "Export Logs",    color: "purple" },
-                  { icon: <FaChartPie />,      label: "Run Report",     color: "teal"   },
-                  { icon: <FaServer />,        label: "Restart Node",   color: "red"    },
-                  { icon: <FaCog />,           label: "System Config",  color: "gray"   },
+                  { icon: <FaUserPlus />,      label: "Add User",      color: "blue"   },
+                  { icon: <FaUserShield />,    label: "Manage Roles",  color: "cyan"   },
+                  { icon: <FaKey />,           label: "Revoke Token",  color: "orange" },
+                  { icon: <FaDatabase />,      label: "Backup DB",     color: "green"  },
+                  { icon: <FaClipboardList />, label: "Export Logs",   color: "purple" },
+                  { icon: <FaChartPie />,      label: "Run Report",    color: "teal"   },
+                  { icon: <FaServer />,        label: "Restart Node",  color: "red"    },
+                  { icon: <FaCog />,           label: "System Config", color: "gray"   },
                 ].map((qa, i) => (
-                  <button className={`adm-quick-btn adm-quick-btn--${qa.color}`} key={i}>
+                  <button
+                    className={`adm-quick-btn adm-quick-btn--${qa.color}`}
+                    key={i}
+                    onClick={() => navigate("/404")}
+                  >
                     <span className="adm-quick-btn__icon">{qa.icon}</span>
                     <span className="adm-quick-btn__label">{qa.label}</span>
                   </button>

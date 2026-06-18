@@ -13,6 +13,8 @@
   color: var(--text-primary);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
+  /* Hint browser that this element scrolls for passive listener optimization */
+  will-change: scroll-position;
 }
 
 .reveal {
@@ -24,6 +26,10 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ============================================================
+   HERO TAG & PULSE
+   ============================================================ */
 
 .hero-tag {
   display: inline-flex;
@@ -44,12 +50,19 @@
   border-radius: 50%;
   background: var(--accent);
   animation: pulse 1.8s infinite;
+  flex-shrink: 0;
+  /* GPU layer for pulse animation */
+  will-change: box-shadow;
 }
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5); }
-  70% { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5); }
+  70%  { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
   100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
 }
+
+/* ============================================================
+   RADAR  —  GPU-composited so it never blocks scroll
+   ============================================================ */
 
 .radar-field {
   position: absolute;
@@ -57,7 +70,11 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0.3;
+  /* Isolate compositing so children don't affect page stacking */
+  isolation: isolate;
+  contain: strict;
 }
+
 .radar-ring {
   position: absolute;
   top: 50%;
@@ -66,10 +83,12 @@
   border-radius: 50%;
   opacity: 0.25;
   transform: translate(-50%, -50%);
+  /* Static rings don't need will-change */
 }
 .ring-1 { width: 260px; height: 260px; }
 .ring-2 { width: 440px; height: 440px; }
 .ring-3 { width: 620px; height: 620px; }
+
 .radar-sweep {
   position: absolute;
   top: 50%;
@@ -77,14 +96,28 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, var(--accent-soft) 40deg, transparent 80deg);
-  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--accent-soft) 40deg,
+    transparent 80deg
+  );
+  /* translateZ(0) forces its own GPU compositor layer */
+  transform: translate(-50%, -50%) translateZ(0);
+  will-change: transform;
   animation: sweep 4s linear infinite;
+  /* Contain paint so repaints stay inside this element */
+  contain: strict;
 }
+
 @keyframes sweep {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  from { transform: translate(-50%, -50%) translateZ(0) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) translateZ(0) rotate(360deg); }
 }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 
 .primary-btn {
   background: var(--accent);
@@ -95,11 +128,16 @@
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.95rem;
 }
 .primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(45, 212, 191, 0.25);
 }
+
+/* ============================================================
+   SHARED UTILITIES
+   ============================================================ */
 
 .eyebrow {
   display: block;
@@ -121,7 +159,7 @@
 }
 
 /* ============================================================
-   PAGE-SPECIFIC
+   HERO
    ============================================================ */
 
 .contact-hero {
@@ -131,11 +169,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Isolate hero so the radar layer doesn't bleed into page compositing */
+  isolation: isolate;
 }
 .contact-hero-content {
   position: relative;
   z-index: 2;
   max-width: 680px;
+  padding-top: 20px;
 }
 .contact-hero h1 {
   font-size: clamp(2.1rem, 4.5vw, 3.1rem);
@@ -147,6 +188,10 @@
   font-size: 1.05rem;
   line-height: 1.7;
 }
+
+/* ============================================================
+   MAIN FORM + CHANNELS
+   ============================================================ */
 
 .contact-main {
   display: grid;
@@ -209,6 +254,28 @@
 .contact-form button {
   margin-top: 8px;
 }
+
+/* --- Input validation states --- */
+.contact-form input.input-error {
+  border-color: #f87171;
+}
+.contact-form input.input-valid {
+  border-color: #34d399;
+}
+.field-error-msg {
+  font-size: 0.72rem;
+  color: #f87171;
+  margin-top: 2px;
+  font-weight: 500;
+}
+.field-success-msg {
+  font-size: 0.72rem;
+  color: #34d399;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* --- Success state --- */
 .contact-success {
   text-align: center;
   padding: 40px 20px;
@@ -226,6 +293,10 @@
   color: var(--text-muted);
   margin: 0;
 }
+
+/* ============================================================
+   CHANNEL CARDS
+   ============================================================ */
 
 .contact-channels {
   display: flex;
@@ -248,6 +319,7 @@
   color: var(--accent);
   font-size: 1.2rem;
   margin-top: 2px;
+  flex-shrink: 0;
 }
 .channel-card h3 {
   margin: 0 0 4px;
@@ -263,6 +335,10 @@
   color: var(--text-muted);
   font-size: 0.82rem;
 }
+
+/* ============================================================
+   OFFICES
+   ============================================================ */
 
 .contact-offices {
   padding: 70px 24px;
@@ -298,6 +374,7 @@
 .office-icon {
   color: var(--accent);
   margin-top: 4px;
+  flex-shrink: 0;
 }
 .office-card h3 {
   margin: 0 0 2px;
@@ -314,6 +391,10 @@
   color: var(--text-muted);
   font-size: 0.88rem;
 }
+
+/* ============================================================
+   FAQ + CTA
+   ============================================================ */
 
 .contact-cta {
   display: grid;
@@ -358,13 +439,169 @@
   line-height: 1.6;
 }
 
-@media (max-width: 900px) {
-  .contact-main,
-  .offices-grid,
-  .contact-cta { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
+/* ============================================================
+   TOAST SYSTEM
+   ============================================================ */
+
+.toast-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  pointer-events: auto;
+  animation: toastSlideIn 0.3s ease;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+  min-width: 260px;
+  max-width: 360px;
+}
+.toast-success {
+  background: #064e3b;
+  border: 1px solid #34d399;
+  color: #6ee7b7;
+}
+.toast-error {
+  background: #450a0a;
+  border: 1px solid #f87171;
+  color: #fca5a5;
+}
+.toast-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  font-style: normal;
+}
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ============================================================
+   RESPONSIVE — TABLET (max 900px)
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .contact-main {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px 24px 60px;
+  }
+  .offices-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .contact-cta {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 24px 80px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max 600px)
+   ============================================================ */
+
+@media (max-width: 600px) {
+  /* Hero */
+  .contact-hero {
+    padding: 70px 16px 48px;
+  }
+  .contact-hero h1 {
+    font-size: 1.75rem;
+  }
+  .hero-sub {
+    font-size: 0.95rem;
+  }
+
+  /* Form wrap */
+  .contact-form-wrap {
+    padding: 22px 16px;
+    border-radius: 14px;
+  }
+  .contact-form-wrap h2 {
+    font-size: 1.25rem;
+  }
+
+  /* Name + Company side-by-side → stacked */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Channels */
+  .contact-channels {
+    gap: 12px;
+  }
+  .channel-card {
+    padding: 16px;
+  }
+
+  /* Offices */
+  .contact-offices {
+    padding: 40px 16px;
+  }
+  .offices-image img {
+    border-radius: 12px;
+  }
+  .office-card {
+    padding: 14px 16px;
+  }
+
+  /* FAQ + CTA panel */
+  .contact-cta-panel {
+    padding: 24px 16px;
+    border-radius: 14px;
+  }
+  .contact-cta {
+    padding: 32px 16px 64px;
+  }
+
+  /* Toasts — full width at bottom */
+  .toast-container {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+  }
+  .toast {
+    min-width: unset;
+    max-width: 100%;
+    width: 100%;
+    font-size: 0.82rem;
+    padding: 12px 14px;
+  }
+
+  /* Button full width on mobile */
+  .primary-btn {
+    width: 100%;
+    padding: 13px 20px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .radar-sweep, .pulse-dot { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+  .reveal,
+  .radar-sweep,
+  .pulse-dot {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  @keyframes toastSlideIn {
+    from { opacity: 1; transform: none; }
+  }
 }

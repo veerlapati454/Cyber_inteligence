@@ -12,6 +12,11 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 /* ── CSS Variables ── */
 :root {
   --void:        #020812;
@@ -32,16 +37,14 @@
 /* ── Full-Page Background ── */
 .login-page {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--void);
   background-image:
-    /* SVG circuit grid */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M0 40h30M50 40h30M40 0v30M40 50v30' stroke='%2300f5ff' stroke-width='0.4' opacity='0.15'/%3E%3Ccircle cx='40' cy='40' r='3' fill='none' stroke='%2300f5ff' stroke-width='0.6' opacity='0.2'/%3E%3Ccircle cx='0'  cy='0'  r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='80' cy='0'  r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='0'  cy='80' r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3Ccircle cx='80' cy='80' r='1.5' fill='%2300f5ff' opacity='0.12'/%3E%3C/svg%3E"),
-    /* Radial glow at center */
     radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,80,120,0.45) 0%, transparent 70%),
-    /* Deep gradient base */
     linear-gradient(160deg, #020d1a 0%, #020812 55%, #04101c 100%);
   background-size: 80px 80px, cover, cover;
   position: relative;
@@ -92,6 +95,7 @@
   position: relative;
   z-index: 10;
   width: min(440px, 92vw);
+  max-width: 100%;
   padding: 44px 40px 36px;
   background: var(--card-bg);
   border: 1px solid var(--border-glow);
@@ -104,11 +108,9 @@
     0 0 100px rgba(0,30,60,0.7),
     inset 0 1px 0 rgba(0,245,255,0.1);
 
-  /* 3D lift on load */
   animation: cardFloat 6s ease-in-out infinite, cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-style: preserve-3d;
 
-  /* Accent corner slash */
   clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
 }
 
@@ -278,7 +280,24 @@
   width: 100%;
   padding-right: 46px;
 }
-.password-box span {
+
+/* Hide Edge/IE native password reveal button */
+.password-box input::-ms-reveal,
+.password-box input::-ms-clear {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* Hide Chromium/Edge autofill button */
+.password-box input::-webkit-credentials-auto-fill-button,
+.password-box input::-webkit-strong-password-auto-fill-button {
+  display: none !important;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.toggle-eye {
   position: absolute;
   right: 14px;
   top: 50%;
@@ -289,8 +308,14 @@
   align-items: center;
   font-size: 1.05rem;
   transition: color 0.2s;
+  user-select: none;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
 }
-.password-box span:hover { color: var(--cyan); }
+.toggle-eye:hover { color: var(--cyan); }
 
 /* ── Validation Text ── */
 .error-text {
@@ -307,6 +332,40 @@
   color: var(--green);
   letter-spacing: 0.05em;
   text-shadow: 0 0 8px rgba(0,255,136,0.4);
+}
+
+/* ── Forgot Password ── */
+.forgot-password {
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 18px;
+}
+.forgot-password a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--cyan-dim);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s, text-shadow 0.2s;
+  position: relative;
+}
+.forgot-password a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--cyan);
+  transition: width 0.25s ease;
+  box-shadow: 0 0 6px var(--cyan);
+}
+.forgot-password a:hover {
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+.forgot-password a:hover::after {
+  width: 100%;
 }
 
 /* ── Submit Button ── */
@@ -427,9 +486,9 @@
 }
 
 @keyframes particleDrift {
-  0%   { transform: translateY(0)   scale(1);   opacity: 0.7; }
+  0%   { transform: translateY(0)    scale(1);    opacity: 0.7; }
   50%  { transform: translateY(-20px) scale(1.05); opacity: 0.9; }
-  100% { transform: translateY(8px)  scale(0.97);  opacity: 0.6; }
+  100% { transform: translateY(8px)  scale(0.97); opacity: 0.6; }
 }
 
 @keyframes textFlicker {
@@ -465,10 +524,69 @@
 
 /* ── Responsive ── */
 @media (max-width: 480px) {
-  .login-card {
-    padding: 34px 22px 28px;
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
   }
+
+  .login-page {
+    overflow-x: hidden;
+    padding: 20px 0;
+    align-items: flex-start;
+    padding-top: 32px;
+  }
+
+  .login-card {
+    padding: 28px 18px 24px;
+    width: 92vw;
+    max-width: calc(100vw - 24px);
+    /* Disable 3D transforms on mobile to prevent overflow */
+    transform: none !important;
+    animation: cardEntranceMobile 0.6s ease both;
+  }
+
   .login-card h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .login-card > p {
+    font-size: 0.65rem;
+    margin-bottom: 20px;
+  }
+
+  .role-switch {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .role-switch button {
+    font-size: 0.78rem;
+    padding: 9px 0;
+    gap: 6px;
+  }
+
+  .input-group input {
+    font-size: 0.85rem;
+    padding: 11px 14px;
+  }
+
+  .login-btn-submit {
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    padding: 13px;
+  }
+}
+
+@keyframes cardEntranceMobile {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: brightness(0.5) blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1) blur(0px);
   }
 }

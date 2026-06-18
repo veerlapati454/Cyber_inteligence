@@ -35,7 +35,8 @@
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   background: var(--cyber-black);
   color: var(--cyber-text);
-  overflow-x: hidden;
+  /* FIX: was overflow-x: hidden which caused scroll to be blocked in some browsers */
+  overflow-x: clip;
 }
 
 /* ─── Reveal animation ───────────────────────────────────────────────────── */
@@ -62,7 +63,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* FIX: was overflow: hidden which created a new scroll container, trapping scroll */
+  overflow: clip;
   background: var(--cyber-black); /* fallback while canvas boots */
 }
 
@@ -128,6 +130,7 @@
   text-align: center;
   max-width: 760px;
   padding: 2rem 1.5rem;
+  margin-top: 50px;
 }
 
 .hero-tag {

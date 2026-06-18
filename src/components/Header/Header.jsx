@@ -22,10 +22,10 @@ function Header() {
         <div className="right-section">
 
           <nav className={`nav-links ${menuOpen ? "active" : ""}`}>
-            <Link to="/">Home</Link>
-            <Link to="/service">Services</Link>
-            <Link to="/threat">Threat</Link>
-            <Link to="/contact">Contact</Link>
+            <Link to="/" onClick={() => setMenuOpen(false)} >Home</Link>
+            <Link to="/service" onClick={() => setMenuOpen(false)} >Services</Link>
+            <Link to="/threat" onClick={() => setMenuOpen(false)} >Threat</Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)} >Contact</Link>
 
             <Link to="/login" className="mobile-btn">
               Login

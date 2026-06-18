@@ -12,6 +12,11 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 /* ── CSS Variables ── */
 :root {
   --void:        #020812;
@@ -34,6 +39,7 @@
 /* ── Full-Page Background ── */
 .signup-page {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +51,7 @@
     linear-gradient(160deg, #020d1a 0%, #020812 55%, #04101c 100%);
   background-size: 80px 80px, cover, cover;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   font-family: var(--font-display);
   perspective: 1200px;
 }
@@ -92,6 +98,7 @@
   position: relative;
   z-index: 10;
   width: min(460px, 94vw);
+  max-width: 100%;
   padding: 40px 40px 34px;
   background: var(--card-bg);
   border: 1px solid var(--border-glow);
@@ -224,8 +231,27 @@
 .password-box input {
   width: 100%;
   padding-right: 46px;
+  /* Hide Edge/IE built-in reveal button */
+  -ms-reveal: none;
 }
-.password-box span {
+
+/* Hide the native password reveal icon in Edge/IE */
+.password-box input::-ms-reveal,
+.password-box input::-ms-clear {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* Hide in Chrome/Edge (Chromium) */
+.password-box input::-webkit-credentials-auto-fill-button,
+.password-box input::-webkit-strong-password-auto-fill-button {
+  display: none !important;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.toggle-eye {
   position: absolute;
   right: 14px;
   top: 50%;
@@ -236,8 +262,14 @@
   align-items: center;
   font-size: 1rem;
   transition: color 0.2s;
+  user-select: none;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
 }
-.password-box span:hover { color: var(--cyan); }
+.toggle-eye:hover { color: var(--cyan); }
 
 /* ── Error Text ── */
 .error-text {
@@ -536,12 +568,88 @@
   .facebook-btn::before { display: none; }
 }
 
-/* ── Responsive ── */
-@media (max-width: 480px) {
-  .signup-card {
-    padding: 30px 20px 26px;
+/* ── Responsive — Tablet ── */
+@media (max-width: 600px) {
+  .signup-page {
+    padding: 24px 12px;
+    align-items: flex-start;
+    padding-top: 28px;
+    overflow: hidden;
   }
+
+  .signup-card {
+    width: 96vw;
+    max-width: calc(100vw - 16px);
+    padding: 28px 18px 24px;
+    /* Disable 3D transforms on mobile to prevent horizontal overflow */
+    transform: none !important;
+    animation: cardEntranceMobile 0.6s ease both;
+  }
+
   .signup-card h2 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  .signup-card > p {
+    font-size: 0.64rem;
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 13px;
+  }
+
+  .input-group input {
+    font-size: 0.84rem;
+    padding: 10px 14px;
+  }
+
+  .signup-btn-submit {
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    padding: 12px;
+  }
+
+  .google-btn,
+  .facebook-btn {
+    font-size: 0.82rem;
+    padding: 10px;
+  }
+
+  .terms-box label {
+    font-size: 0.66rem;
+  }
+
+  .social-login::before {
+    font-size: 0.58rem;
+  }
+}
+
+/* ── Responsive — Small phones ── */
+@media (max-width: 380px) {
+  .signup-card {
+    padding: 22px 14px 20px;
+  }
+
+  .signup-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .role-switch button {
+    font-size: 0.75rem;
+  }
+}
+
+@keyframes cardEntranceMobile {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: brightness(0.5) blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1) blur(0px);
   }
 }

@@ -22,13 +22,16 @@ function Footer() {
         <div className="footer-about">
 
           {/* Logo Placeholder */}
-          <div className="footer-logo" onClick={()=>navigate("/")}>
-            <img
-              src={logo}
-              alt="CyberIntel Logo"
-              
-            />
-          </div>
+          <div
+  className="footer-logo"
+  onClick={() => {
+    navigate("/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }}
+  style={{ cursor: "pointer" }}
+>
+  <img src={logo} alt="CyberIntel Logo" />
+</div>
 
           
 

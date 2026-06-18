@@ -7,10 +7,10 @@ import {
   FaArrowUp, FaArrowDown, FaEye, FaNetworkWired,
 } from "react-icons/fa";
 import "./Dashboard.css";
-import logo  from "../../assets/stackly_logo.webp"
+import logo from "../../assets/stackly_logo.webp";
 import { useNavigate } from "react-router-dom";
 
-/* ─── Mini count-up ─────────────────────────────────────────────────── */
+/* ─── Mini count-up ─────────────────────────────────────────────────────── */
 function useCountUp(end, duration = 1600) {
   const [val, setVal] = useState(0);
   const startRef = useRef(null);
@@ -30,7 +30,7 @@ function useCountUp(end, duration = 1600) {
   return val;
 }
 
-/* ─── Animated stat card ────────────────────────────────────────────── */
+/* ─── Animated stat card ────────────────────────────────────────────────── */
 function StatCard({ value, suffix = "", label, icon, trend, trendLabel, color }) {
   const count = useCountUp(value);
   return (
@@ -51,7 +51,7 @@ function StatCard({ value, suffix = "", label, icon, trend, trendLabel, color })
   );
 }
 
-/* ─── Mini sparkline (SVG) ──────────────────────────────────────────── */
+/* ─── Mini sparkline (SVG) ──────────────────────────────────────────────── */
 function Sparkline({ data, color = "#00e5ff" }) {
   const max = Math.max(...data);
   const min = Math.min(...data);
@@ -68,7 +68,7 @@ function Sparkline({ data, color = "#00e5ff" }) {
   );
 }
 
-/* ─── Radial gauge ──────────────────────────────────────────────────── */
+/* ─── Radial gauge ──────────────────────────────────────────────────────── */
 function Gauge({ pct, label, color }) {
   const r = 38, cx = 48, cy = 48;
   const circ = 2 * Math.PI * r;
@@ -94,24 +94,26 @@ function Gauge({ pct, label, color }) {
   );
 }
 
-/* ─── Main Dashboard ────────────────────────────────────────────────── */
+/* ─── Main Dashboard ────────────────────────────────────────────────────── */
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("dashboard");
   const [searchVal, setSearchVal] = useState("");
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const scrollRef = useRef(null);
+
   const navItems = [
-    { id: "dashboard", icon: <FaHome />,              label: "Dashboard"     },
-    { id: "threats",   icon: <FaShieldAlt />,          label: "Threats"       },
-    { id: "malware",   icon: <FaBug />,                label: "Malware"       },
-    { id: "network",   icon: <FaNetworkWired />,       label: "Network"       },
-    { id: "incidents", icon: <FaExclamationTriangle />,label: "Incidents"     },
-    { id: "reports",   icon: <FaChartBar />,           label: "Reports"       },
-    { id: "audit",     icon: <FaLock />,               label: "Audit Logs"    },
-    { id: "intel",     icon: <FaGlobe />,              label: "Dark Web Intel"},
-    { id: "soc",       icon: <FaServer />,             label: "SOC Monitor"   },
-    { id: "response",  icon: <FaUserSecret />,         label: "IR Console"    },
+    { id: "dashboard", icon: <FaHome />,               label: "Dashboard"      },
+    { id: "threats",   icon: <FaShieldAlt />,           label: "Threats"        },
+    { id: "malware",   icon: <FaBug />,                 label: "Malware"        },
+    { id: "network",   icon: <FaNetworkWired />,        label: "Network"        },
+    { id: "incidents", icon: <FaExclamationTriangle />, label: "Incidents"      },
+    { id: "reports",   icon: <FaChartBar />,            label: "Reports"        },
+    { id: "audit",     icon: <FaLock />,                label: "Audit Logs"     },
+    { id: "intel",     icon: <FaGlobe />,               label: "Dark Web Intel" },
+    { id: "soc",       icon: <FaServer />,              label: "SOC Monitor"    },
+    { id: "response",  icon: <FaUserSecret />,          label: "IR Console"     },
   ];
 
   const threats = [
@@ -125,30 +127,39 @@ function Dashboard() {
 
   const intel = [
     { region: "Eastern Europe", count: 3812, bar: 82, color: "#ff3b3b" },
-    { region: "Southeast Asia",  count: 2540, bar: 55, color: "#ff8c00" },
-    { region: "North America",   count: 1920, bar: 42, color: "#f5c400" },
-    { region: "Middle East",     count: 1340, bar: 29, color: "#0a84ff" },
-    { region: "West Africa",     count:  870, bar: 19, color: "#00c97a" },
+    { region: "Southeast Asia", count: 2540, bar: 55, color: "#ff8c00" },
+    { region: "North America",  count: 1920, bar: 42, color: "#f5c400" },
+    { region: "Middle East",    count: 1340, bar: 29, color: "#0a84ff" },
+    { region: "West Africa",    count:  870, bar: 19, color: "#00c97a" },
   ];
 
   const activityData = [12, 28, 18, 44, 36, 55, 40, 62, 48, 70, 54, 83];
   const malwareData  = [5,  9,  7,  22, 15, 31, 20, 38, 25, 44, 30, 51];
 
   const alerts = [
-    { icon: <FaExclamationTriangle />, color: "critical", text: "New ransomware strain detected on node 192.168.1.44", time: "2m" },
-    { icon: <FaCheckCircle />,         color: "success",  text: "Phishing domain takedown confirmed",                  time: "18m" },
+    { icon: <FaExclamationTriangle />, color: "critical", text: "New ransomware strain detected on node 192.168.1.44",  time: "2m"  },
+    { icon: <FaCheckCircle />,         color: "success",  text: "Phishing domain takedown confirmed",                   time: "18m" },
     { icon: <FaBell />,                color: "high",     text: "Unusual outbound traffic – 4 GB exfiltration attempt", time: "34m" },
-    { icon: <FaEye />,                 color: "medium",   text: "Dark web mention: company credentials listed for sale", time: "1h" },
-    { icon: <FaShieldAlt />,           color: "success",  text: "SOC patched CVE-2025-2891 across 48 endpoints",       time: "2h" },
+    { icon: <FaEye />,                 color: "medium",   text: "Dark web mention: company credentials listed for sale",time: "1h"  },
+    { icon: <FaShieldAlt />,           color: "success",  text: "SOC patched CVE-2025-2891 across 48 endpoints",        time: "2h"  },
   ];
+
+  /* ─── Nav click handler ─────────────────────────────────────────── */
+  const handleNavClick = (id) => {
+    setActiveNav(id);
+    setSidebarOpen(false);
+    if (id === "dashboard") {
+      scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/404");
+    }
+  };
 
   return (
     <div className={`dashboard-layout ${sidebarOpen ? "sidebar-expanded" : ""}`}>
 
-      {/* ── Sidebar ──────────────────────────────────────────────────── */}
+      {/* ── Sidebar ─────────────────────────────────────────────────── */}
       <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-
-        {/* Logo placeholder */}
         <div className="sidebar__logo">
           <div className="logo-placeholder">
             <img src={logo} alt="" />
@@ -163,7 +174,7 @@ function Dashboard() {
             <button
               key={item.id}
               className={`sidebar__nav-item ${activeNav === item.id ? "active" : ""}`}
-              onClick={() => { setActiveNav(item.id); setSidebarOpen(false); }}
+              onClick={() => handleNavClick(item.id)}
             >
               <span className="sidebar__nav-icon">{item.icon}</span>
               <span className="sidebar__nav-label">{item.label}</span>
@@ -175,16 +186,18 @@ function Dashboard() {
         </nav>
 
         <div className="sidebar__footer">
-          <button className="sidebar__nav-item">
+          <button className="sidebar__nav-item" onClick={() => navigate("/404")}>
             <span className="sidebar__nav-icon"><FaCog /></span>
             <span className="sidebar__nav-label">Settings</span>
           </button>
-          <button className="sidebar__nav-item sidebar__nav-item--logout" onClick={()=>navigate("/login")}>
+          <button
+            className="sidebar__nav-item sidebar__nav-item--logout"
+            onClick={() => navigate("/login")}
+          >
             <span className="sidebar__nav-icon"><FaSignOutAlt /></span>
             <span className="sidebar__nav-label">Sign Out</span>
           </button>
         </div>
-
       </aside>
 
       {/* Overlay for mobile */}
@@ -192,10 +205,10 @@ function Dashboard() {
         <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* ── Main ─────────────────────────────────────────────────────── */}
-      <main className="dashboard-main">
+      {/* ── Main ────────────────────────────────────────────────────── */}
+      <div className="dashboard-main">
 
-        {/* Top bar */}
+        {/* Sticky topbar */}
         <header className="topbar">
           <button className="topbar__menu" onClick={() => setSidebarOpen(true)}>
             <FaBars />
@@ -212,153 +225,149 @@ function Dashboard() {
           <div className="topbar__right">
             <div className="topbar__live">
               <span className="live-dot" />
-              Live
+              <span className="live-label">Live</span>
             </div>
-            <button className="topbar__notif">
+            <button className="topbar__notif" onClick={() => navigate("/404")}>
               <FaBell />
               <span className="notif-badge">3</span>
             </button>
-            <div className="topbar__avatar">SA</div>
+            <div className="topbar__avatar" onClick={() => navigate("/404")} style={{ cursor: "pointer" }}>SA</div>
           </div>
         </header>
 
-        <div className="dashboard-content">
+        {/* Scrollable content */}
+        <div className="dashboard-scroll" ref={scrollRef}>
+          <div className="dashboard-content">
 
-          {/* Page title */}
-          <div className="page-header">
-            <div>
-              <h1>Cyber Intelligence Dashboard</h1>
-              <p>Monitor threats, incidents and security intelligence in real-time.</p>
-            </div>
-            <div className="page-header__date">
-              {new Date().toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" })}
-            </div>
-          </div>
-
-          {/* ── Stats ──────────────────────────────────────────────── */}
-          <div className="stats-grid">
-            <StatCard value={12548} label="Threats Detected"  icon={<FaShieldAlt />} trend={14}  trendLabel="vs last week" color="blue"   />
-            <StatCard value={3456}  label="Malware Samples"   icon={<FaBug />}       trend={-6}  trendLabel="vs last week" color="red"    />
-            <StatCard value={98}    suffix="%" label="Detection Rate" icon={<FaCheckCircle />} trend={2} trendLabel="vs last month" color="green" />
-            <StatCard value={247}   label="Active Incidents"  icon={<FaExclamationTriangle />} trend={22} trendLabel="vs yesterday" color="orange" />
-          </div>
-
-          {/* ── Activity + Gauges ───────────────────────────────────── */}
-          <div className="mid-row">
-
-            <div className="activity-card card">
-              <div className="card__header">
-                <h2>Threat Activity</h2>
-                <span className="card__meta">Last 12 hours</span>
+            <div className="page-header">
+              <div>
+                <h1>Cyber Intelligence Dashboard</h1>
+                <p>Monitor threats, incidents and security intelligence in real-time.</p>
               </div>
-              <div className="activity-charts">
-                <div className="activity-chart-item">
-                  <span className="chart-label">All Threats</span>
-                  <Sparkline data={activityData} color="#00e5ff" />
-                  <span className="chart-val">+83 <span>now</span></span>
+              <div className="page-header__date">
+                {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="stats-grid">
+              <StatCard value={12548} label="Threats Detected"  icon={<FaShieldAlt />}           trend={14}  trendLabel="vs last week"  color="blue"   />
+              <StatCard value={3456}  label="Malware Samples"   icon={<FaBug />}                 trend={-6}  trendLabel="vs last week"  color="red"    />
+              <StatCard value={98}    suffix="%" label="Detection Rate" icon={<FaCheckCircle />} trend={2}   trendLabel="vs last month" color="green"  />
+              <StatCard value={247}   label="Active Incidents"  icon={<FaExclamationTriangle />} trend={22}  trendLabel="vs yesterday"  color="orange" />
+            </div>
+
+            {/* Activity + Gauges */}
+            <div className="mid-row">
+              <div className="activity-card card">
+                <div className="card__header">
+                  <h2>Threat Activity</h2>
+                  <span className="card__meta">Last 12 hours</span>
                 </div>
-                <div className="activity-chart-item">
-                  <span className="chart-label">Malware</span>
-                  <Sparkline data={malwareData} color="#ff5a5a" />
-                  <span className="chart-val">+51 <span>now</span></span>
+                <div className="activity-charts">
+                  <div className="activity-chart-item">
+                    <span className="chart-label">All Threats</span>
+                    <Sparkline data={activityData} color="#00e5ff" />
+                    <span className="chart-val">+83 <span>now</span></span>
+                  </div>
+                  <div className="activity-chart-item">
+                    <span className="chart-label">Malware</span>
+                    <Sparkline data={malwareData} color="#ff5a5a" />
+                    <span className="chart-val">+51 <span>now</span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="gauges-card card">
+                <div className="card__header">
+                  <h2>System Health</h2>
+                  <span className="card__meta">Live</span>
+                </div>
+                <div className="gauges-grid">
+                  <Gauge pct={98} label="Detection" color="#00e5ff" />
+                  <Gauge pct={76} label="Endpoints"  color="#0a84ff" />
+                  <Gauge pct={91} label="Uptime"     color="#00c97a" />
+                  <Gauge pct={43} label="Capacity"   color="#f5c400" />
                 </div>
               </div>
             </div>
 
-            <div className="gauges-card card">
+            {/* Threat table */}
+            <div className="card threat-card">
               <div className="card__header">
-                <h2>System Health</h2>
-                <span className="card__meta">Live</span>
+                <h2>Recent Threat Feed</h2>
+                <button className="card__btn" onClick={() => navigate("/404")}>View All</button>
               </div>
-              <div className="gauges-grid">
-                <Gauge pct={98} label="Detection" color="#00e5ff" />
-                <Gauge pct={76} label="Endpoints"  color="#0a84ff" />
-                <Gauge pct={91} label="Uptime"     color="#00c97a" />
-                <Gauge pct={43} label="Capacity"   color="#f5c400" />
-              </div>
-            </div>
-
-          </div>
-
-          {/* ── Threat Table ────────────────────────────────────────── */}
-          <div className="card threat-card">
-            <div className="card__header">
-              <h2>Recent Threat Feed</h2>
-              <button className="card__btn">View All</button>
-            </div>
-            <div className="table-wrap">
-              <table className="threat-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Threat</th>
-                    <th>Source IP</th>
-                    <th>Severity</th>
-                    <th>Status</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {threats.map(t => (
-                    <tr key={t.id}>
-                      <td className="threat-id">{t.id}</td>
-                      <td>{t.name}</td>
-                      <td className="source-ip">{t.src}</td>
-                      <td><span className={`badge badge--${t.severity}`}>{t.severity}</span></td>
-                      <td><span className={`status status--${t.status.toLowerCase().replace(" ","")}`}>{t.status}</span></td>
-                      <td className="time-cell">{t.time}</td>
+              <div className="table-wrap">
+                <table className="threat-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Threat</th>
+                      <th>Source IP</th>
+                      <th>Severity</th>
+                      <th>Status</th>
+                      <th>Time</th>
                     </tr>
+                  </thead>
+                  <tbody>
+                    {threats.map(t => (
+                      <tr key={t.id}>
+                        <td className="threat-id">{t.id}</td>
+                        <td>{t.name}</td>
+                        <td className="source-ip">{t.src}</td>
+                        <td><span className={`badge badge--${t.severity}`}>{t.severity}</span></td>
+                        <td><span className={`status status--${t.status.toLowerCase().replace(" ", "")}`}>{t.status}</span></td>
+                        <td className="time-cell">{t.time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Bottom row */}
+            <div className="bottom-row">
+              <div className="card geo-card">
+                <div className="card__header">
+                  <h2>Attack Origins</h2>
+                  <span className="card__meta">Top regions</span>
+                </div>
+                <div className="geo-list">
+                  {intel.map((r, i) => (
+                    <div className="geo-row" key={i}>
+                      <span className="geo-region">{r.region}</span>
+                      <div className="geo-bar-wrap">
+                        <div className="geo-bar" style={{ width: `${r.bar}%`, background: r.color }} />
+                      </div>
+                      <span className="geo-count">{r.count.toLocaleString()}</span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* ── Bottom row ──────────────────────────────────────────── */}
-          <div className="bottom-row">
-
-            {/* Geo origin */}
-            <div className="card geo-card">
-              <div className="card__header">
-                <h2>Attack Origins</h2>
-                <span className="card__meta">Top regions</span>
+                </div>
               </div>
-              <div className="geo-list">
-                {intel.map((r, i) => (
-                  <div className="geo-row" key={i}>
-                    <span className="geo-region">{r.region}</span>
-                    <div className="geo-bar-wrap">
-                      <div className="geo-bar" style={{ width: `${r.bar}%`, background: r.color }} />
+
+              <div className="card alerts-card">
+                <div className="card__header">
+                  <h2>Recent Alerts</h2>
+                  <button className="card__btn" onClick={() => navigate("/404")}>Mark all read</button>
+                </div>
+                <div className="alerts-list">
+                  {alerts.map((a, i) => (
+                    <div className="alert-row" key={i}>
+                      <span className={`alert-icon alert-icon--${a.color}`}>{a.icon}</span>
+                      <div className="alert-body">
+                        <p>{a.text}</p>
+                        <span>{a.time} ago</span>
+                      </div>
                     </div>
-                    <span className="geo-count">{r.count.toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Alerts */}
-            <div className="card alerts-card">
-              <div className="card__header">
-                <h2>Recent Alerts</h2>
-                <button className="card__btn">Mark all read</button>
-              </div>
-              <div className="alerts-list">
-                {alerts.map((a, i) => (
-                  <div className="alert-row" key={i}>
-                    <span className={`alert-icon alert-icon--${a.color}`}>{a.icon}</span>
-                    <div className="alert-body">
-                      <p>{a.text}</p>
-                      <span>{a.time} ago</span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
           </div>
-
         </div>
-      </main>
+      </div>
     </div>
   );
 }
