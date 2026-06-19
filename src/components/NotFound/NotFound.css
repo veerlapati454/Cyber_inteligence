@@ -273,7 +273,60 @@
 .home-btn:active {
   transform: translateY(0) scale(0.97);
 }
+/* ── Button Row ── */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
+/* ── Back Button ── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 30px;
+  background: linear-gradient(90deg, rgba(74,122,153,0.14) 0%, rgba(74,122,153,0.08) 100%);
+  border: 1px solid var(--text-muted);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 16px rgba(74,122,153,0.1);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.back-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(74,122,153,0.15), transparent);
+  transition: left 0s;
+}
+.back-btn:hover::before {
+  left: 150%;
+  transition: left 0.5s ease;
+}
+.back-btn:hover {
+  background: rgba(74,122,153,0.22);
+  border-color: var(--text-main);
+  color: var(--text-main);
+  box-shadow: 0 0 30px rgba(74,122,153,0.25), inset 0 0 16px rgba(74,122,153,0.06);
+  transform: translateY(-2px) translateZ(6px);
+}
+.back-btn:active {
+  transform: translateY(0) scale(0.97);
+}
 /* ══════════════════════════════════════
    KEYFRAME ANIMATIONS
 ══════════════════════════════════════ */

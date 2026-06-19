@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
-import { FaHome, FaShieldAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaHome, FaShieldAlt, FaArrowLeft } from "react-icons/fa";
 import "./NotFound.css";
 
 function NotFound() {
+  const navigate = useNavigate();
+
   return (
     <div className="notfound-container">
 
@@ -21,10 +23,17 @@ function NotFound() {
           could not be located.
         </p>
 
-        <Link to="/" className="home-btn">
-          <FaHome />
-          Return Home
-        </Link>
+        <div className="btn-row">
+          <button className="back-btn" onClick={() => navigate(-1)}>
+            <FaArrowLeft />
+            Go Back
+          </button>
+
+          <Link to="/" className="home-btn">
+            <FaHome />
+            Return Home
+          </Link>
+        </div>
 
       </div>
 

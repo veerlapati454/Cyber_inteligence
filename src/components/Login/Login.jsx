@@ -60,12 +60,7 @@ function Login() {
       return;
     }
 
-    if (password.length < 6) {
-      alert(
-        "Password must be at least 6 characters"
-      );
-      return;
-    }
+    
 
     if (role === "admin") {
       navigate("/admin-dashboard");

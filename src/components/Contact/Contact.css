@@ -164,7 +164,7 @@
 }
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr; /* ← Name and Company now stack vertically */
   gap: 18px;
 }
 .contact-form label {
@@ -472,12 +472,6 @@
   }
   .contact-form-wrap h2 {
     font-size: 1.25rem;
-  }
-
-  /* Name + Company side-by-side → stacked */
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 0;
   }
 
   /* Channels */
